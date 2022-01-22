@@ -1,0 +1,223 @@
+/* PANELGRID */
+.semBorda tr, .semBorda td {
+	border: none !important;
+}
+
+/* LOGIN */
+.login {
+	border: none;
+	box-shadow: 0 0 10px 0 rgba(168 0 0);
+	height: 61ex;
+	margin: 0 auto;
+	text-align: center;
+	width: 35%;
+	color: white;
+	border-bottom: 80px solid #dc3545;
+	font-size: 20px;
+	position: absolute; /* 2 */
+	top: 50%;
+	left: 50%; /* 3 */
+	transform: translate(-50%, -50%);
+	border-radius: 20px;
+}
+
+.login .img-avatar-login {
+	width: 60%;
+	height: 10%;
+	margin-top: 12px;
+}
+
+.size-btn-login {
+	width: 18%;
+	height: 5px;
+}
+
+.p-md-4 {
+	padding: 1.5rem !important;
+}
+
+.login .button-entrar {
+	margin: 0;
+	top: 50%;
+	left: 228%;
+	height: 50px;
+	background: transparent;
+	border: 1px solid white;
+	margin-top: 30px;
+	cursor: pointer;
+	border-radius: 30px;
+	font-size: 20px !important;
+	border-width: unset;
+}
+
+.login .button-entrar:hover {
+	background: #212529;
+	border: solid white;
+	transition-duration: 0.6s;
+}
+
+.login-h1 {
+	font-size: 2.5cm !important;
+	text-align: center;
+	font-weight: bold;
+}
+
+.botao-sair {
+	position: absolute !important;
+	left: 94% !important;
+	font-size: 20px !important;
+	top: 50% !important;
+	transform: translate(-50%, -50%) !important;
+	background-color: #000 !important;
+	border: #000 solid 1px !important;
+}
+
+.botao-sair:hover {
+	background-color: #fff !important;
+	border: #fff solid 1px !important;
+	color: #000 !important;
+}
+
+.titulo-pagina-principal {
+	text-align: center;
+	font-size: 50px;
+	margin-top: 20px;
+	color: #fff;
+	font-weight: 700;
+}
+
+.fab-des {
+	padding: 30px;
+}
+
+.lbl-fab-des {
+	font-size: 20px !important;
+	font-weight: 700;
+}
+
+.lbl-bold {
+	font-weight: bold;
+}
+
+.label-endereco {
+	color: red !important;
+	font-size: 20px !important;
+	width: 150% !important;
+	right: 50% !important;
+}
+
+.btn-finalizar-venda {
+	background: red !important;
+	border: black !important;
+	color: white !important;
+	width: 100% !important;
+	height: 60px;
+	font-size: 18px !important;
+	font-weight: bold !important;
+	margin: 7px !important;
+}
+
+.btn-finalizar-venda:hover {
+	background: black !important;
+	color: red !important;
+}
+
+.btn-finalizar-venda-voltar {
+	width: 130px;
+	height: 60px;
+	font-size: 18px !important;
+	font-weight: bold !important;
+	left: 362px;
+}
+
+.forms {
+	width: 100% !important;
+}
+
+.buttons-forms {
+	width: 15% !important;
+	height: 60px !important;
+	font-size: 150% !important;
+	left: 35% !important;
+}
+
+.test {
+	border-radius: 30px !important;
+	background-color: red !important;
+}
+
+.btn-search {
+	width: 155px !important;
+	height: 60px !important;
+	font-size: 22px !important;
+}
+
+.size-labels {
+	font-size: 15px !important;
+}
+
+.cart {
+	border: none !important;
+	background: #333 !important;
+	height: 3em !important;
+	font-size: 200% !important;
+}
+
+.btn-excluir-tbl-vnd {
+	background: red !important;
+	border: red !important;
+}
+
+.label-carrinho {
+	font-size: 150% !important;
+	width: 150% !important;
+	margin-left: 5px !important;
+}
+
+.btn-confirm-dialog {
+	width: 20% !important;
+	height: 30px !important;
+}
+
+.btn-confirm-dialog-sim {
+	background: red !important;
+	border: red !important;
+}
+
+.btn-confirm-dialog-sim:hover {
+	background: black !important;
+	border: black !important;
+}
+
+.btn-confirm-dialog-nao {
+	
+}
+
+.pnl-datas {
+	width: 55% !important;
+	border-radius: 35px !important;
+	background: black !important;
+}
+
+.btn-ipt-dt {
+	
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

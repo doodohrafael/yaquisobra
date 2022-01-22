@@ -1,0 +1,179 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+	<h:outputStylesheet library="css" name="main.css" />
+	<link rel="preconnect" href="https://fonts.gstatic.com"></link>
+	<link
+		href="https://fonts.googleapis.com/css2?family=Roboto:ital,
+		wght@0,100;0,400;0,500;0,900;1,100;1,400;1,500;1,900&display;=swap"
+		rel="stylesheet"></link>
+	<title>Yaquisobra</title>
+	<script src="https://kit.fontawesome.com/acde964d7f.js"
+		crossorigin="anonymous"></script>
+</h:head>
+<h:body>
+	<p:growl id="caixaMensagem" life="4000" />
+
+	<h:form id="form-finalizar">
+		<h:panelGrid columns="2">
+			<h:outputText styleClass="lbl-bold" value="Data/Hora: " />
+			<h:outputText id="data" value="#{vendaMBean.venda.horario}">
+				<f:convertDateTime pattern="dd/MM/YYYY - HH:mm"
+					timeZone="America/Recife" />
+			</h:outputText>
+			<h:outputText styleClass="lbl-bold" id="fun" value="Funcionário: " />
+			<h:outputText value="#{loginMBean.funcionarioLogado.nome}" />
+
+			<h:outputText styleClass="lbl-bold" value="Valor Total: " />
+			<h:outputText value="R$#{vendaMBean.venda.valorTotal}" />
+
+			<h:outputText styleClass="lbl-bold" value="Total de itens: " />
+			<h:outputText value="#{vendaMBean.venda.quantidadeTotal}" />
+
+			<h:outputText styleClass="lbl-bold" value="Frete: " />
+			<p:inputText value="#{vendaMBean.venda.frete}" style="width:23%;" />
+
+			<p:outputLabel styleClass="lbl-bold" value="Forma de Pagamento: " />
+			<p:selectOneMenu value="#{vendaMBean.venda.tipoPagamento}">
+				<f:selectItem itemLabel="Selecione" itemValue="" />
+				<f:selectItem itemLabel="Dinheiro" itemValue="Dinheiro" />
+				<f:selectItem itemLabel="PIX" itemValue="PIX" />
+				<f:selectItem itemLabel="Cartão de crédito"
+					itemValue="Cartão de crédito" />
+				<f:selectItem itemLabel="Cartão de débito"
+					itemValue="Cartão de débito" />
+			</p:selectOneMenu>
+
+		</h:panelGrid>
+
+		<h:panelGrid columns="2">
+			<p:dataTable id="tabela-itens-original"
+				emptyMessage="#{Constantes.MSG_REGISTRO_NAO_ENCONTRADO}"
+				value="#{vendaMBean.colecaoItens}" var="item" rows="10"
+				paginator="true" style="width: 700px;">
+
+				<f:facet name="header">
+					         Itens
+					    </f:facet>
+
+				<p:column headerText="#{Constantes.LABEL_PRODUTO}"
+					style="width:20%;">
+					<h:outputText value="#{item.produto.nome}" />
+				</p:column>
+
+				<p:column headerText="#{Constantes.LABEL_QUANTIDADE}"
+					style="width:3%;">
+					<h:outputText value="#{item.quantidade}" />
+				</p:column>
+
+				<p:column headerText="#{Constantes.LABEL_VALOR_PARCIAL}"
+					style="width:8%;">
+					<h:outputText value="R$#{item.valorParcial}" />
+				</p:column>
+
+			</p:dataTable>
+		</h:panelGrid>
+		<br />
+		<p:toolbar>
+			<p:toolbarGroup>
+				<h:outputText styleClass="lbl-bold label-endereco" value="Cliente" />
+				<i class="fas fa-level-down-alt" style=""></i>
+			</p:toolbarGroup>
+		</p:toolbar>
+		<br />
+		<h:panelGrid columns="2">
+			<h:outputText styleClass="lbl-bold" value="Cliente: " />
+			<p:inputText value="#{vendaMBean.venda.cliente.nome}"
+				style="width: 300%;" maxlength="255" placeholder="Nome e sobrenome" />
+
+			<h:outputText styleClass="lbl-bold" value="Telefone: " />
+			<p:inputMask value="#{vendaMBean.venda.cliente.telefone}"
+				mask="(99)99999-9999" style="width: 75%;" />
+		</h:panelGrid>
+		<br />
+		<p:toolbar>
+			<p:toolbarGroup>
+				<h:outputText styleClass="lbl-bold label-endereco" value="Endereço" />
+				<i class="fas fa-level-down-alt"></i>
+			</p:toolbarGroup>
+		</p:toolbar>
+		<br />
+		<h:panelGrid columns="2">
+			<h:outputText styleClass="lbl-bold" value="Logradouro: " />
+			<p:inputText id="log"
+				value="#{vendaMBean.venda.cliente.endereco.logradouro}"
+				style="width: 300%;" maxlength="70" />
+
+			<h:outputText styleClass="lbl-bold" value="Número: " />
+			<p:inputText value="#{vendaMBean.venda.cliente.endereco.numero}"
+				maxlength="20" />
+
+			<h:outputText styleClass="lbl-bold" value="Bairro: " />
+			<p:inputText value="#{vendaMBean.venda.cliente.endereco.bairro}"
+				maxlength="70" style="width: 300%;" />
+
+			<h:outputText styleClass="lbl-bold" value="Município: " />
+			<p:inputText value="#{vendaMBean.venda.cliente.endereco.municipio}"
+				maxlength="70" style="width: 300%;" />
+
+			<h:outputText styleClass="lbl-bold" value="Estado: " />
+			<p:inputText value="#{vendaMBean.venda.cliente.endereco.estado}"
+				style="width: 21%;" maxlength="2" />
+
+			<h:outputText styleClass="lbl-bold" value="Cep: " />
+			<p:inputMask value="#{vendaMBean.venda.cliente.endereco.cep}"
+				style="width: 55%;" maxlength="9" mask="99999-999" />
+
+			<h:outputText styleClass="lbl-bold" value="Complemento: " />
+			<p:inputText value="#{vendaMBean.venda.cliente.endereco.complemento}"
+				maxlength="70" style="width: 300%;"
+				placeholder="Ex: Apto 32, 3° Andar" />
+
+		</h:panelGrid>
+		<br />
+		<p:toolbar>
+			<p:toolbarGroup>
+				<h:outputText styleClass="lbl-bold label-endereco" value="."
+					style="color: #333 !important;" />
+			</p:toolbarGroup>
+		</p:toolbar>
+		<h:panelGrid columns="2">
+
+			<p:commandButton value="Finalizar Venda"
+				styleClass="btn-finalizar-venda" action="#{vendaMBean.salvar}"
+				update=":caixaMensagem :form-finalizar" icon="fas fa-check">
+				<p:confirm header="Confirmação"
+					message="Deseja realmente realizar esta venda?"
+					icon="pi pi-info-circle" />
+			</p:commandButton>
+
+			<p:commandButton value="Voltar" action="#{vendaMBean.fecharDialog}"
+				styleClass="btn-finalizar-venda-voltar"
+				icon="far fa-arrow-alt-circle-right">
+				<p:confirm header="Confirmação"
+					message="Deseja realmente cancelar esta venda?"
+					icon="pi pi-info-circle" />
+			</p:commandButton>
+		</h:panelGrid>
+	</h:form>
+
+	<p:dialog closable="true" draggable="true" modal="true"
+		appendTo="@(body)" resizable="false" header="Confirmar Exclusão"
+		widgetVar="dialog-exclusao">
+		<h:form>
+			<p:confirmDialog global="true" showEffect="fade" hideEffect="fade"
+				responsive="true" width="350">
+				<p:commandButton value="Não" type="button"
+					styleClass="ui-confirmdialog-no ui-button-flat btn-confirm-dialog" />
+				<p:commandButton value="Sim" type="button"
+					styleClass="ui-confirmdialog-yes btn-confirm-dialog btn-confirm-dialog-sim" />
+			</p:confirmDialog>
+		</h:form>
+	</p:dialog>
+</h:body>
+</html>

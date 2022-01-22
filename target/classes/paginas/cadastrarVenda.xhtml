@@ -1,0 +1,242 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/templates/templatePadrao.xhtml">
+	<ui:define name="metadata">
+		<f:metadata>
+			<f:event listener="#{vendaMBean.listarProdutos}" type="preRenderView" />
+		</f:metadata>
+	</ui:define>
+	<ui:define name="conteudo">
+		<h:form id="form-vendas">
+
+			<h1 class="titulos">FAZER VENDA</h1>
+			<p:dataTable id="tabela-produtos" reflow="true"
+				emptyMessage="#{Constantes.MSG_REGISTRO_NAO_ENCONTRADO}"
+				value="#{vendaMBean.colecaoProdutos}" var="produto" rows="10"
+				paginator="true">
+				<f:facet name="header">
+		            PRODUTOS EM ESTOQUE
+		        </f:facet>
+				<p:column headerText="Nome">
+					<h:outputText value="#{produto.nome}" />
+				</p:column>
+
+				<p:column headerText="Descrição">
+					<h:outputText value="#{produto.descricao}" />
+				</p:column>
+
+				<p:column headerText="Preço" style="width:8%;">
+					<h:outputText value="R$#{produto.preco}" />
+				</p:column>
+
+				<p:column headerText="Quantidade" style="width:7%;">
+					<h:outputText value="#{produto.quantidade}" />
+				</p:column>
+
+				<p:column headerText="#{Constantes.LABEL_OPERADORES}"
+					style="width: 10%; text-align:center;">
+
+					<p:commandButton value="#{Constantes.BOTAO_ADICIONAR}"
+						icon="pi pi-plus" styleClass="ui-button-success"
+						style="margin-right: .5rem;"
+						actionListener="#{vendaMBean.adicionarItens(produto)}"
+						update=":form-vendas:tabela-produtos 
+						:caixaMensagem :form-vendas:tabela-itens-original">
+					</p:commandButton>
+
+				</p:column>
+
+			</p:dataTable>
+			<br />
+			<p:toolbar>
+				<p:toolbarGroup>
+					<i class="fas fa-cart-plus" style="font-size: 200% !important;"></i>
+					<h:outputText styleClass="lbl-bold label-carrinho" value="CARRINHO" />
+				</p:toolbarGroup>
+			</p:toolbar>
+			<p:dataTable id="tabela-itens-original"
+				emptyMessage="#{Constantes.MSG_REGISTRO_NAO_ENCONTRADO}"
+				value="#{vendaMBean.colecaoItens}" var="item" rows="10"
+				paginator="true">
+
+				<p:column headerText="#{Constantes.LABEL_PRODUTO}">
+					<h:outputText value="#{item.produto.nome}" />
+				</p:column>
+
+				<p:column headerText="#{Constantes.LABEL_QUANTIDADE}"
+					style="width:7%;">
+					<h:outputText value="#{item.quantidade}" />
+				</p:column>
+
+				<!-- <p:column headerText="#{Constantes.LABEL_QUANTIDADE}">
+					<p:spinner id="spn" value="#{item.quantidade}" />
+				</p:column> -->
+
+				<p:column headerText="#{Constantes.LABEL_VALOR_PARCIAL}"
+					style="width:8%;">
+					<h:outputText value="R$#{item.valorParcial}" />
+				</p:column>
+
+				<p:column headerText="#{Constantes.LABEL_OPERADORES}"
+					style="width: 12%; text-align:center;">
+					<p:commandButton value="#{Constantes.BOTAO_EXCLUIR}"
+						icon="pi pi-plus"
+						styleClass="ui-button-success btn-excluir-tbl-vnd"
+						style="margin-right: .5rem;"
+						actionListener="#{vendaMBean.removerItem(item)}"
+						update=":form-vendas:tabela-produtos 
+						:form-vendas:tabela-itens-original">
+					</p:commandButton>
+				</p:column>
+
+				<f:facet name="footer">
+					<h:outputText id="valor-total"
+						value="Valor Total: R$#{vendaMBean.venda.valorTotal}"
+						styleClass="valor-total" style="margin-right:10px" />
+
+					<p:commandButton value="Finalizara" action="#{vendaMBean.abrirDialog}"
+						update=":form-finalizar :caixaMensagem form-vendas:tabela-itens-original
+						 #{vendaMBean.resetarCarrinho()}" />
+
+				</f:facet>
+
+			</p:dataTable>
+		</h:form>
+		<p:dialog closable="true" draggable="true" modal="true" height="700"
+			appendTo="@(body)" resizable="true" header="Relatório da Venda"
+			widgetVar="dialog-finalizar" showEffect="clip" hideEffect="clip">
+			<h:form id="form-finalizar">
+				<h:panelGrid columns="2">
+					<h:outputText styleClass="lbl-bold" value="Data/Hora: " />
+					<h:outputText id="data" value="#{vendaMBean.venda.horario}">
+						<f:convertDateTime pattern="dd/MM/YYYY - HH:mm"
+							timeZone="America/Recife" />
+					</h:outputText>
+					<h:outputText styleClass="lbl-bold" id="fun" value="Funcionário: " />
+					<h:outputText value="#{loginMBean.funcionarioLogado.nome}" />
+
+					<h:outputText styleClass="lbl-bold" value="Valor Total: " />
+					<h:outputText value="R$#{vendaMBean.venda.valorTotal}" />
+
+					<h:outputText styleClass="lbl-bold" value="Total de itens: " />
+					<h:outputText value="#{vendaMBean.venda.quantidadeTotal}" />
+
+					<h:outputText styleClass="lbl-bold" value="Frete: " />
+					<p:inputText value="#{vendaMBean.venda.frete}" style="width:23%;" />
+
+					<p:outputLabel styleClass="lbl-bold" value="Forma de Pagamento: " />
+					<p:selectOneMenu value="#{vendaMBean.venda.tipoPagamento}">
+						<f:selectItem itemLabel="Selecione" itemValue="" />
+						<f:selectItem itemLabel="Dinheiro" itemValue="Dinheiro" />
+						<f:selectItem itemLabel="PIX" itemValue="PIX" />
+						<f:selectItem itemLabel="Cartão de crédito"
+							itemValue="Cartão de crédito" />
+						<f:selectItem itemLabel="Cartão de débito"
+							itemValue="Cartão de débito" />
+					</p:selectOneMenu>
+
+				</h:panelGrid>
+
+				<h:panelGrid columns="2">
+					<p:dataTable id="tabela-itens-original"
+						emptyMessage="#{Constantes.MSG_REGISTRO_NAO_ENCONTRADO}"
+						value="#{vendaMBean.colecaoItens}" var="item" rows="10"
+						paginator="true" style="width: 700px;">
+
+						<f:facet name="header">
+					         Itens
+					    </f:facet>
+
+						<p:column headerText="#{Constantes.LABEL_PRODUTO}"
+							style="width:20%;">
+							<h:outputText value="#{item.produto.nome}" />
+						</p:column>
+
+						<p:column headerText="#{Constantes.LABEL_QUANTIDADE}"
+							style="width:3%;">
+							<h:outputText value="#{item.quantidade}" />
+						</p:column>
+
+						<p:column headerText="#{Constantes.LABEL_VALOR_PARCIAL}"
+							style="width:8%;">
+							<h:outputText value="R$#{item.valorParcial}" />
+						</p:column>
+
+					</p:dataTable>
+				</h:panelGrid>
+				<br />
+				<h:panelGrid columns="2">
+					<h:outputText styleClass="lbl-bold" value="Cliente: " />
+					<p:inputText value="#{vendaMBean.venda.cliente.nome}"
+						style="width: 300%;" maxlength="255"
+						placeholder="Nome e sobrenome" />
+
+					<h:outputText styleClass="lbl-bold" value="Telefone: " />
+					<p:inputMask value="#{vendaMBean.venda.cliente.telefone}"
+						mask="(99)99999-9999" style="width: 75%;" />
+
+					<p:toolbar>
+						<p:toolbarGroup>
+							<h:outputText styleClass="lbl-bold label-endereco"
+								value="Endereço" />
+							<i class="fas fa-level-down-alt"></i>
+						</p:toolbarGroup>
+					</p:toolbar>
+					<br />
+
+					<h:outputText styleClass="lbl-bold" value="Logradouro: " />
+					<p:inputText id="log"
+						value="#{vendaMBean.venda.cliente.endereco.logradouro}"
+						style="width: 300%;" maxlength="70" />
+
+					<h:outputText styleClass="lbl-bold" value="Número: " />
+					<p:inputText value="#{vendaMBean.venda.cliente.endereco.numero}"
+						maxlength="20" />
+
+					<h:outputText styleClass="lbl-bold" value="Bairro: " />
+					<p:inputText value="#{vendaMBean.venda.cliente.endereco.bairro}"
+						maxlength="70" style="width: 300%;" />
+
+					<h:outputText styleClass="lbl-bold" value="Município: " />
+					<p:inputText value="#{vendaMBean.venda.cliente.endereco.municipio}"
+						maxlength="70" style="width: 300%;" />
+
+					<h:outputText styleClass="lbl-bold" value="Estado: " />
+					<p:inputText value="#{vendaMBean.venda.cliente.endereco.estado}"
+						style="width: 21%;" maxlength="2" />
+
+					<h:outputText styleClass="lbl-bold" value="Cep: " />
+					<p:inputMask value="#{vendaMBean.venda.cliente.endereco.cep}"
+						style="width: 55%;" maxlength="9" mask="99999-999" />
+
+					<h:outputText styleClass="lbl-bold" value="Complemento: " />
+					<p:inputText
+						value="#{vendaMBean.venda.cliente.endereco.complemento}"
+						maxlength="70" style="width: 300%;"
+						placeholder="Ex: Apto 32, 3° Andar" />
+
+				</h:panelGrid>
+				<br />
+				<br />
+				<h:panelGrid columns="2">
+
+					<p:commandButton value="Finalizar Vendas"
+						styleClass="btn-finalizar-venda" action="#{vendaMBean.salva}"
+						update=":caixaMensagem :form-finalizar :form-vendas:tabela-itens-original" />
+						
+					<p:commandButton value="Voltar"
+						styleClass="btn-finalizar-venda-voltar"
+						onclick="PF('dialog-finalizar').hide();" />
+				</h:panelGrid>
+
+			</h:form>
+		</p:dialog>
+
+	</ui:define>
+</ui:composition>
+</html>

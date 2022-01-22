@@ -1,0 +1,153 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+
+
+<ui:composition template="/templates/templatePadrao.xhtml">
+	<ui:define name="metadata">
+		<f:metadata>
+			<f:event listener="#{vendaMBean.consultarVendas}"
+				type="preRenderView" />
+		</f:metadata>
+	</ui:define>
+
+	<ui:define name="conteudo">
+		<h:form id="form-vendas">
+			<h1 class="titulos">CONSULTORIA DETALHADA DAS VENDAS</h1>
+			<!-- <div class="btn-adicionar">
+				<p:commandButton value="#{Constantes.BOTAO_NOVO_ADICIONAR}"
+					rendered="#{loginMBean.funcionarioLogado.funcao != 'Balconista'}"
+					icon="pi pi-plus" styleClass="btn-adicionar"
+					style="margin: 7px; font-size: 20px;"
+					action="/paginas/cadastrarProduto.xhtml?faces-redirect=true">
+				</p:commandButton>
+			</div> -->
+
+			<p:panelGrid id="pnl-cld" columns="5" styleClass="semBorda pnl-datas">
+
+				<p:outputLabel value="Data Inicial: "
+					styleClass="lbl-bold size-labels" />
+				<p:calendar id="data-inicial" styleClass="btn-ipt-dt" 
+					converterMessage="O Campo Data é inválido."
+					value="#{vendaMBean.dataInicial}" showOn="button" mask="true"
+					pattern="dd/MM/yyyy" />
+
+				<p:outputLabel value="Data Final: "
+					styleClass="lbl-bold size-labels" />
+				<p:calendar id="data-final" styleClass="btn-ipt-dt"
+					converterMessage="O Campo Data é inválido."
+					value="#{vendaMBean.dataFinal}" showOn="button" mask="true"
+					pattern="dd/MM/yyyy" />
+
+				<p:commandButton id="botaoPesquisar" value="Pesquisar"
+					styleClass="btn-search" icon="fas fa-search"
+					action="#{vendaMBean.filtrarPorData}"
+					update=":form-vendas:tabela-vendas" />
+
+			</p:panelGrid>
+			<br />
+			<p:dataTable id="tabela-vendas" reflow="true"
+				emptyMessage="#{Constantes.MSG_REGISTRO_NAO_ENCONTRADO}"
+				value="#{vendaMBean.colecaoVendas}" var="venda" rows="5"
+				paginator="true" sortBy="#{venda.horario}"> 
+
+				<p:column headerText="Data/Hora" style="width:7.5%;"
+					sortBy="#{venda.horario}" sortOrder="desc" sortPriority="1">
+					<h:outputText value="#{venda.horario}">
+						<f:convertDateTime pattern="dd/MM/YYYY - HH:mm"
+							timeZone="America/Recife" />
+					</h:outputText>
+				</p:column>
+
+				<p:column headerText="Cliente" sortBy="#{venda.cliente.nome}" sortPriority="2">
+					<h:outputText value="#{venda.cliente.nome}" />
+				</p:column>
+
+
+				<!-- <p:column headerText="N° de compras">
+					<h:outputText value="#{produto.descricao}" />
+				</p:column> -->
+
+				<p:column headerText="Telefone" style="width:6.5%;">
+					<h:outputText value="#{venda.cliente.telefone}" />
+				</p:column>
+
+				<p:column headerText="Logradouro" style="width:7%;">
+					<h:outputText value="#{venda.cliente.endereco.logradouro}" />
+				</p:column>
+
+				<p:column headerText="Bairro" style="width:7%;">
+					<h:outputText value="#{venda.cliente.endereco.bairro}" />
+				</p:column>
+
+				<p:column headerText="Número" style="width:3%;">
+					<h:outputText value="#{venda.cliente.endereco.numero}" />
+				</p:column>
+
+				<p:column headerText="Valor Pago" style="width:4.5%;">
+					<h:outputText value="#{venda.valorTotal}">
+						<f:convertNumber pattern="0.00" />
+					</h:outputText>
+				</p:column>
+
+				<p:column headerText="Qnt. Itens" style="width:5%;">
+					<h:outputText value="#{venda.quantidadeTotal}" />
+				</p:column>
+
+				<p:column headerText="Tipo de Pagamento" style="width:9%;">
+					<h:outputText value="#{venda.tipoPagamento}" />
+				</p:column>
+
+				<p:column headerText="Frete" style="width:2%;">
+					<h:outputText value="#{venda.frete}" />
+				</p:column>
+
+				<p:column headerText="Funcionário" style="width:10%;">
+					<h:outputText value="#{venda.funcionario.nome}" />
+				</p:column>
+
+				<!-- <p:column headerText="#{Constantes.LABEL_OPERADORES}"
+					rendered="#{loginMBean.funcionarioLogado.funcao != 'Balconista'}"
+					style="width: 12%; text-align:center;">
+
+					<p:commandButton value="#{Constantes.BOTAO_EXCLUIR}"
+						style=" background-color: red; border: none;"
+						action="#{produtoMBean.excluir(produto)}"
+						update="tabela-produtos :caixaMensagem">
+						<p:confirm header="Confirmação"
+							message="Você quer deletar este registro?"
+							icon="pi pi-info-circle" />
+					</p:commandButton>
+
+					<p:commandButton value="#{Constantes.BOTAO_ALTERAR}"
+						style="border: none;" action="#{produtoMBean.telaAlterar}">
+
+						<f:setPropertyActionListener value="#{produto}"
+							target="#{produtoMBean.produto}" />
+					</p:commandButton>
+
+				</p:column> -->
+			</p:dataTable>
+
+		</h:form>
+
+		<p:dialog closable="true" draggable="true" modal="true"
+			appendTo="@(body)" resizable="false" header="Confirmar Exclusão"
+			widgetVar="dialog-exclusao">
+			<h:form>
+				<p:confirmDialog global="true" showEffect="fade" hideEffect="fade"
+					responsive="true" width="350">
+					<p:commandButton value="Não" type="button"
+						styleClass="ui-confirmdialog-no ui-button-flat" />
+					<p:commandButton value="Sim" type="button"
+						styleClass="ui-confirmdialog-yes" />
+				</p:confirmDialog>
+			</h:form>
+		</p:dialog>
+
+	</ui:define>
+</ui:composition>
+</html>

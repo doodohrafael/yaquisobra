@@ -1,0 +1,121 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+
+
+<ui:composition template="/templates/templatePadrao.xhtml">
+	<ui:define name="metadata">
+		<f:metadata>
+			<f:event listener="#{estoqueMBean.consultarEstoque}"
+				type="preRenderView" />
+		</f:metadata>
+	</ui:define>
+
+	<ui:define name="conteudo">
+		<h:form>
+
+			<h1 class="titulos">GERENCIAR ESTOQUE</h1>
+			<div class="btn-adicionar">
+				<p:commandButton icon="pi pi-plus"
+					styleClass="ui-button-success btn-adicionar"
+					style="margin: 7px; font-size: 20px;"
+					action="/paginas/cadastrarFuncionario.xhtml?faces-redirect=true">
+				</p:commandButton>
+			</div>
+
+			<p:dataTable id="tabela-funcionarios" reflow="true"
+				emptyMessage="#{Constantes.MSG_REGISTRO_NAO_ENCONTRADO}"
+				value="#{estoqueMBean.colecaoEstoque}" var="estoque" rows="10"
+				paginator="true">
+
+
+				<!-- <p:column headerText="Image" exportable="false">
+						<p:graphicImage name="images/product/#{product.image}"
+							library="demo" styleClass="product-image" />
+					</p:column> -->
+
+				<p:column headerText="Nome">
+					<h:outputText value="#{estoque.fornecedor}" />
+				</p:column>
+
+
+				<!-- <p:column headerText="Marca"
+						sortBy="#{estoqueMBean.estoque.ingrediente.nome}"
+						filterBy="#{estoqueMBean.estoque.ingrediente.nome}">
+						<h:outputText value="#{estoqueMBean.estoque.ingrediente.marca}" />
+					</p:column>
+
+					<p:column headerText="Fornecedor"
+						sortBy="#{estoqueMBean.estoque.fornecedor}"
+						filterBy="#{estoqueMBean.estoque.fornecedor}">
+						<h:outputText value="#{estoqueMBean.estoque.fornecedor}" />
+					</p:column>
+
+					<p:column headerText="Data de Entrada"
+						sortBy="#{estoqueMBean.estoque.dataEntrada}"
+						filterBy="#{estoqueMBean.estoque.dataEntrada}">
+						<h:outputText value="#{estoqueMBean.estoque.dataEntrada}" />
+					</p:column>
+
+					<p:column headerText="Preço"
+						sortBy="#{estoqueMBean.estoque.ingrediente.preco}"
+						filterBy="#{estoqueMBean.estoque.ingrediente.preco}">
+						<h:outputText value="#{estoqueMBean.estoque.ingrediente.preco}" />
+					</p:column>
+
+					<p:column headerText="Volume"
+						sortBy="#{estoqueMBean.estoque.ingrediente.volume}"
+						filterBy="#{estoqueMBean.estoque.ingrediente.volume}">
+						<h:outputText value="#{estoqueMBean.estoque.ingrediente.volume}" />
+					</p:column>
+
+					<p:column headerText="Descrição"
+						sortBy="#{estoqueMBean.estoque.ingrediente.descricao}"
+						filterBy="#{estoqueMBean.estoque.ingrediente.descricao}">
+						<h:outputText
+							value="#{estoqueMBean.estoque.ingrediente.descricao}" />
+					</p:column> -->
+
+				<p:column headerText="#{Constantes.LABEL_OPERADORES}"
+					style="width: 12%; text-align:center;">
+
+					<p:commandButton value="#{Constantes.BOTAO_EXCLUIR}"
+						icon="pi pi-trash" style=" background-color: red; border: none;"
+						action="#{funcionarioMBean.excluir(funcionario)}"
+						update="tabela-funcionarios :caixaMensagem">
+						<p:confirm header="Confirmação"
+							message="Você quer deletar este registro?"
+							icon="pi pi-info-circle" />
+					</p:commandButton>
+
+					<p:commandButton value="#{Constantes.BOTAO_ALTERAR}"
+						icon="pi pi-pencil" style="border: none;"
+						action="#{funcionarioMBean.telaAlterar}">
+
+						<f:setPropertyActionListener value="#{funcionario}"
+							target="#{funcionarioMBean.funcionario}" />
+
+					</p:commandButton>
+				</p:column>
+			</p:dataTable>
+		</h:form>
+		<p:dialog closable="true" draggable="true" modal="true"
+			appendTo="@(body)" resizable="false" header="Confirmar Exclusão"
+			widgetVar="dialog-exclusao">
+			<h:form>
+				<p:confirmDialog global="true" showEffect="fade" hideEffect="fade"
+					responsive="true" width="350">
+					<p:commandButton value="Não" type="button"
+						styleClass="ui-confirmdialog-no ui-button-flat" />
+					<p:commandButton value="Sim" type="button"
+						styleClass="ui-confirmdialog-yes" />
+				</p:confirmDialog>
+			</h:form>
+		</p:dialog>
+
+	</ui:define>
+</ui:composition>
+</html>
